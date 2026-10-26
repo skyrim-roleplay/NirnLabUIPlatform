@@ -67,8 +67,9 @@ namespace NL::Render
                 spdlog::error("{}: failed FinishCommandList(), code {:X}", NameOf(CEFCopyRenderLayer), result);
             }
 
+            const auto cpuFrameSRV = m_cpuFrame.Upload(m_renderData);
             m_renderData->spriteBatch->Draw(
-                m_cefSRV.Get(),
+                cpuFrameSRV != nullptr ? cpuFrameSRV : m_cefSRV.Get(),
                 _Cef_Menu_Draw_Vector,
                 nullptr,
                 ::DirectX::Colors::White,
@@ -94,7 +95,10 @@ namespace NL::Render
         int width,
         int height)
     {
-        spdlog::error("CEFCopyRenderLayer::OnPaint called");
+        if (type != PET_POPUP)
+        {
+            m_cpuFrame.Store(m_renderData, buffer, width, height);
+        }
     }
 
     void CEFCopyRenderLayer::OnAcceleratedPaint(

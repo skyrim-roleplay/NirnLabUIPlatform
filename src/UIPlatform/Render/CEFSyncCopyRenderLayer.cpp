@@ -93,10 +93,12 @@ namespace NL::Render
             CopySharedTexure();
         }
 
-        if (m_isVisible && m_cefSRV != nullptr)
+        const auto cpuFrameSRV = m_cpuFrame.Upload(m_renderData);
+        const auto srv = cpuFrameSRV != nullptr ? cpuFrameSRV : m_cefSRV.Get();
+        if (m_isVisible && srv != nullptr)
         {
             m_renderData->spriteBatch->Draw(
-                m_cefSRV.Get(),
+                srv,
                 _Cef_Menu_Draw_Vector,
                 nullptr,
                 ::DirectX::Colors::White,
@@ -134,7 +136,10 @@ namespace NL::Render
                                          int width,
                                          int height)
     {
-        spdlog::error("CEFCopyRenderLayer::OnPaint called");
+        if (type != PaintElementType::PET_POPUP)
+        {
+            m_cpuFrame.Store(m_renderData, buffer, width, height);
+        }
     }
 
     void CEFSyncCopyRenderLayer::OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,

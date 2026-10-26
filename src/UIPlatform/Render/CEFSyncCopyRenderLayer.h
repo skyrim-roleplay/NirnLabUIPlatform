@@ -2,6 +2,7 @@
 
 #include "PCH.h"
 #include "IRenderLayer.h"
+#include "CPUFrameTexture.h"
 #include "Hooks/ShutdownHook.hpp"
 
 namespace NL::Render
@@ -25,6 +26,7 @@ namespace NL::Render
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_cefSRV = nullptr;
         const CefAcceleratedPaintInfo* m_acceleratedPaintInfo = nullptr;
         std::atomic_flag m_acceleratedPaintReady = ATOMIC_FLAG_INIT;
+        CPUFrameTexture m_cpuFrame;
 
         void CopySharedTexure();
 

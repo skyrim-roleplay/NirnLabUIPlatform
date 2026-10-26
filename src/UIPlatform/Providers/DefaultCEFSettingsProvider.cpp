@@ -69,7 +69,10 @@ namespace NL::Providers
         info.SetAsWindowless(nullptr);
         info.windowless_rendering_enabled = true;
         info.external_begin_frame_enabled = false;
-        info.shared_texture_enabled = true;
+        // Wine (macOS/Linux) can't open Chromium's shared D3D11 texture in the game's device:
+        // fall back to CPU frames (OnPaint) there
+        const bool isWine = GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "wine_get_version") != nullptr;
+        info.shared_texture_enabled = !isWine;
 
         return info;
     }

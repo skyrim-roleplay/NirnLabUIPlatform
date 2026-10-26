@@ -2,6 +2,7 @@
 
 #include "PCH.h"
 #include "IRenderLayer.h"
+#include "CPUFrameTexture.h"
 #include "Common/SpinLock.h"
 
 namespace NL::Render
@@ -17,6 +18,7 @@ namespace NL::Render
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_cefSRV;
         Microsoft::WRL::ComPtr<ID3D11Device1> m_device1 = nullptr;
         Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_deferredContext;
+        CPUFrameTexture m_cpuFrame;
 
     public:
         ~CEFCopyRenderLayer() override = default;
